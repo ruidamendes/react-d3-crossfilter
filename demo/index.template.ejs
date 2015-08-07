@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+        <title>{%= o.htmlWebpackPlugin.options.title %}</title>
+    </head>
+    <style>
+
+        .brush .extent {
+            stroke: black;
+            fill: black;
+            fill-opacity: 0.6;
+            shape-rendering: crispEdges;
+        }
+
+        .brush-bg {
+            background: black;
+        }
+        body {
+            font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .dot {
+            fill: rgba(0,0,0,0.5);
+        }
+
+        .line {
+            stroke: rgba(0,0,0,0.5);
+        }
+
+        .bar rect {
+            fill: steelblue;
+            shape-rendering: crispEdges;
+        }
+
+        .bar text {
+            fill: #fff;
+        }
+
+        .plot {
+            display: block;
+        }
+        .brush-x {
+            display: block;
+        }
+
+    </style>
+    <body>
+    <div class="todoapp" id="root">
+    </div>
+    </body>
+</html>
