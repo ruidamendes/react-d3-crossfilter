@@ -11,21 +11,30 @@ import titanic from '../../data/titanic';
   componentDidMount() {
     const {actions} = this.props;
 
+    /*
+
+      Going to create a shorthand for declaring an attributions dimension and group at once.
+      Coming soon.
+
+     */
+
     actions.createdCrossfilter({
       dataset   : titanic,
       dimensions: [
         {type: 'linear', name: 'Age', function: (row) => +row.age},
-        {type: 'linear', name: 'Boat', function: (row) => +row.boat},
+        {type: 'ordinal', name: 'Boat', function: (row) => +row.boat},
         {type: 'ordinal', name: 'Class', function: (row) => row.pclass},
         {type: 'ordinal', name: 'Gender', function: (row) => row.sex},
-        {type: 'ordinal', name: 'Survived?', function: (row) => row.survived}
+        {type: 'ordinal', name: 'Survived?', function: (row) => row.survived},
+        {type: 'ordinal', name: 'Age available in data?', function: (row) => row.age !== null},
       ],
       groups    : [
         {name: 'Age', function: (data) => data},
         {name: 'Boat', function: (data) => data},
         {name: 'Class', function: (data) => data},
         {name: 'Survived?', function: (data) => data},
-        {name: 'Gender', function: (data) => data}
+        {name: 'Gender', function: (data) => data},
+        {name: 'Age available in data?', function: (data) => data},
       ]
     });
   }
