@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import HistogramPlot from '../histogramPlot';
-import OrdinalQuantityPlot from '../ordinalQuantity';
+import HistogramPlot from '../plotting/histogramPlot';
+import OrdinalQuantityPlot from '../plotting/ordinalQuantity';
 
 class AttributeExplorer extends Component {
   constructor() {
@@ -17,7 +17,6 @@ class AttributeExplorer extends Component {
 
     return (
       <div>
-        <pre><h1>{name} / {type}</h1></pre>
         {this.renderVisualization()}
       </div>
     );

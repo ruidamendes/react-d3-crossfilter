@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Radium from 'radium';
 import {style} from './style.js'
 
-import HistogramPlot from '../histogramPlot';
-import OrdinalQuantityPlot from '../ordinalQuantity';
+import Panel from './panel';
 import AttributeExplorer from '../attributeExplorer';
 import titanic from '../../data/titanic';
 
@@ -11,6 +10,7 @@ import titanic from '../../data/titanic';
 
   componentDidMount() {
     const {actions} = this.props;
+
     actions.createdCrossfilter({
       dataset   : titanic,
       dimensions: [
@@ -18,11 +18,7 @@ import titanic from '../../data/titanic';
         {type: 'linear', name: 'Boat', function: (row) => +row.boat},
         {type: 'ordinal', name: 'Class', function: (row) => row.pclass},
         {type: 'ordinal', name: 'Gender', function: (row) => row.sex},
-        {
-          type: 'ordinal', name: 'Survived?', function: (row) => {
-          return (row.survived == '0') ? 'No' : 'Yes';
-        }
-        },
+        {type: 'ordinal', name: 'Survived?', function: (row) => row.survived}
       ],
       groups    : [
         {name: 'Age', function: (data) => data},
@@ -53,12 +49,14 @@ import titanic from '../../data/titanic';
   renderDimension(dimension) {
     const {actions, data} = this.props;
     return (
-      <AttributeExplorer key={dimension}
-                         name={dimension}
-                         type={data.dimensionTypes[dimension]}
-                         dimension={data.dimensions[dimension]}
-                         group={data.grps[dimension]}
-                         actions={actions}/>
+      <Panel key={dimension} name={dimension}>
+        <AttributeExplorer key={dimension}
+                           name={dimension}
+                           type={data.dimensionTypes[dimension]}
+                           dimension={data.dimensions[dimension]}
+                           group={data.grps[dimension]}
+                           actions={actions}/>
+      </Panel>
     )
   }
 }
