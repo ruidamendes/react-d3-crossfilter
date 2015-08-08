@@ -88,7 +88,7 @@ class HistogramPlot extends Component {
   }
 
   renderPlot() {
-    const {svg, xScale, yScale, height, yAxis, xAxis} = this.state;
+    const {svg, xScale, yScale, height, width, xAxis} = this.state;
     const {group} = this.props;
 
     const data = group.all();
@@ -111,12 +111,13 @@ class HistogramPlot extends Component {
       .attr("class", "bar")
       .append("rect");
 
+    const barWidth = width / group.size() - 1;
     bars.selectAll("rect")
       .attr("transform", function (d) {
         return "translate(" + xScale(d.key) + "," + yScale(d.value) + ")";
       })
       .attr("x", 1)
-      .attr("width", xScale(4))
+      .attr("width", Math.floor(barWidth))
       .attr("height", d => height - yScale(d.value));
 
     bars.exit()

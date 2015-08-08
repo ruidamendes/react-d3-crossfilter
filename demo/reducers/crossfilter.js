@@ -37,16 +37,52 @@ const groups = {
 
 };
 
+
+/* run-time crossfilters */
+
 const initialState = {
   data       : data,
   crossfilter: cf,
   all        : cf.groupAll(),
   dims       : dims,
-  groups     : groups
+  groups     : groups,
+  dimensions: {},
+  dimensionTypes: {},
+  dataset: null
 };
 
 export default function crossfilterdata(state = initialState, action) {
   switch (action.type) {
+
+    case 'CREATED_CROSSFILTER':
+      const dataset = crossfilter(action.data.dataset);
+      const dims = {};
+      const dimTypes = {};
+      action.data.dimensions.map(dimension => {
+        dims[dimension.name] = dataset.dimension(dimension.function);
+        dimTypes[dimension.name] = dimension.type;
+      });
+      const grps = {};
+      action.data.groups.map(group => {
+        grps[group.name] = dims[group.name].group(group.function)
+      });
+      return {
+        ...state,
+        dataset: dataset,
+        dimensions: dims,
+        dimensionTypes: dimTypes,
+        grps: grps
+      };
+
+    case 'CREATED_DIMENSION':
+      const name = action.data.name;
+      const stateDimensions = state.dimensions;
+      stateDimensions[name] = state.dataset.dimension(action.data.function);
+
+      return {
+        ...state,
+        dimensions: stateDimensions
+      };
 
     case 'FILTERED_DIMENSION':
       if (action.data.clear) {
