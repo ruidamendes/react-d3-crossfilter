@@ -7,7 +7,6 @@ export default function crossfilterdata(state = initialState, action) {
   switch (action.type) {
 
     case 'CREATED_CROSSFILTER':
-      console.log('making');
       const dataset  = crossfilter(action.data.dataset);
       const dims     = {};
       const dimTypes = {};
@@ -28,21 +27,10 @@ export default function crossfilterdata(state = initialState, action) {
         grps          : grps
       };
 
-    case 'CREATED_DIMENSION':
-      const name            = action.data.name;
-      const stateDimensions = state.dimensions;
-      stateDimensions[name] = state.dataset.dimension(action.data.function);
-
-      return {
-        ...state,
-        dimensions: stateDimensions
-      };
-
     case 'FILTERED_DIMENSION':
       if (action.data.clear || action.data.values.length == 0) {
         action.data.dimension.filterAll()
       } else if (action.data.ordinal) {
-        console.log(123);
         action.data.dimension.filterFunction((d) => {
           return action.data.values.indexOf(d) >= 0;
         });

@@ -19,8 +19,7 @@ export const style = {
 
   content: {
     base: {
-      padding  : '10px 10px',
-      minHeight: '200px'
+      padding  : '10px 10px'
     }
   }
 };

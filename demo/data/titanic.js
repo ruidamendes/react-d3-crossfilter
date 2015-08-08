@@ -17071,10 +17071,11 @@ const data = [
 ]
 
 const titanic = data.map(record => {
-    return {
-      ...record,
-    age: (record.age === 'NA' ? null : +record.age)
-    };
-  })
+  return {
+    ...record,
+    age : (record.age === 'NA' ? null : +record.age),
+    boat: (record.boat === '' ? null : +record.boat),
+  };
+});
 
 export default titanic;

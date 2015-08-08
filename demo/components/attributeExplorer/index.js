@@ -6,17 +6,17 @@ import OrdinalQuantityPlot from '../plotting/ordinalQuantity';
 class AttributeExplorer extends Component {
   constructor() {
     super();
-    this.state = {filter: []}
-  }
-
-  componentDidMount() {
+    this.state = {
+      width : null,
+      filter: []
+    }
   }
 
   render() {
     const {name, type} = this.props;
 
     return (
-      <div>
+      <div ref="content" style={{width: '100%'}}>
         {this.renderVisualization()}
       </div>
     );
@@ -24,6 +24,11 @@ class AttributeExplorer extends Component {
 
   renderVisualization() {
     const {type, name, dimension, group, actions} = this.props;
+    const {width} = this.state;
+
+    if (width === null) {
+      return (<p>Loading.</p>)
+    }
 
     switch (type) {
       case 'linear':
@@ -31,7 +36,7 @@ class AttributeExplorer extends Component {
           <HistogramPlot
             {...this.props}
             onBrush={this.handleFilter.bind(this)}
-            width={500}
+            width={width}
             height={100}
             margin={{top: 5, right: 1, bottom: 25, left: 1}}/>
         );
@@ -42,7 +47,7 @@ class AttributeExplorer extends Component {
             {...this.props}
             onClick={this.handleFilter.bind(this)}
             currentFilter={this.state.filter}
-            width={500}
+            width={width}
             height={group.size()*50}
             margin={{top: 20, right: 1, bottom: 25, left: 50}}/>
         );
@@ -58,8 +63,22 @@ class AttributeExplorer extends Component {
         this.setState({filter: data.values});
         break;
     }
-
   }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize.bind(this));
+    this.setState({width: React.findDOMNode(this.refs.content).offsetWidth});
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize.bind(this));
+  }
+
+  handleResize() {
+    this.setState({width: React.findDOMNode(this.refs.content).offsetWidth});
+  }
+
+
 }
 
 export default AttributeExplorer;
