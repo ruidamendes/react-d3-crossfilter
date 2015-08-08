@@ -25,7 +25,6 @@ class AttributeExplorer extends Component {
 
   renderVisualization() {
     const {type, name, dimension, group, actions} = this.props;
-    console.log(name, this.state);
 
     switch (type) {
       case 'linear':
@@ -43,35 +42,21 @@ class AttributeExplorer extends Component {
           <OrdinalQuantityPlot
             {...this.props}
             onClick={this.handleFilter.bind(this)}
+            currentFilter={this.state.filter}
             width={500}
             height={group.size()*50}
             margin={{top: 20, right: 1, bottom: 25, left: 50}}/>
         );
     }
-
-    //if (data.dimensionTypes[dimension] === 'linear') {
-    //  plot = (
-    //
-    //  )
-    //} else {
-    //  plot = (
-    //
-    //}
-
   }
 
   handleFilter(data) {
     const {actions, type} = this.props;
      actions.filteredDimension(data);
 
-    const filters = [
-      data.values,
-      ...this.state.filter
-    ];
-
     switch (type) {
       case 'ordinal':
-        this.setState({filter: filters});
+        this.setState({filter: data.values});
         break;
     }
 

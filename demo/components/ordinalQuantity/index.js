@@ -77,7 +77,7 @@ class OrdinalQuantityPlot extends Component {
 
   renderPlot() {
     const {svg, xScale, yScale, height, width, xAxis, yAxis} = this.state;
-    const {group} = this.props;
+    const {group, currentFilter} = this.props;
 
     const data = group.all();
     xScale.domain([0, group.top(1)[0].value]);
@@ -101,17 +101,33 @@ class OrdinalQuantityPlot extends Component {
         return xScale(d.value);
       })
       .attr("height", yScale.rangeBand())
+      .style("fill", d => {
+        const isFilter = currentFilter.indexOf(d.key) >= 0;
+        return isFilter ? "orange" : "steelblue"
+      })
       .on("click", this.handleClick.bind(this));
 
     bars.exit()
       .remove();
   }
 
-  handleClick(data) {
-    const {dimension, onClick} = this.props;
+  handleClick(d) {
+    const {dimension, onClick, currentFilter} = this.props;
+
+    let values = currentFilter;
+
+    const isFilter = currentFilter.indexOf(d.key) >= 0;
+    if (isFilter) {
+      values.splice(currentFilter.indexOf(d.key), 1)
+    } else {
+      values = [...currentFilter, d.key]
+    }
+
     onClick({
       dimension: dimension,
-      values: data.key
+      values   : values,
+      ordinal : true
+      // function : (d, values) => values.indexOf(d) >= 0
     });
   }
 }

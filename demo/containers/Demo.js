@@ -5,32 +5,22 @@ import { Connector } from 'react-redux';
 import * as cfActions from '../actions/CrossfilterActions.js';
 
 import crossfilter from 'crossfilter';
-import Panel from '../components/panel';
-import StickPlot from '../components/stickPlot';
-import HistogramPlot from '../components/histogramPlot';
-
 import Dashboard from '../components/dashboard';
 
 export default class Demo extends Component {
-
   render() {
     return (
       <Connector select={state => ({ appData: state.crossfilterdata })}>
-        {this.renderChart.bind(this)}
+        {this.renderDashboard.bind(this)}
       </Connector>
     );
   }
 
-  renderChart({ appData, dispatch }) {
-
-    const actions    = bindActionCreators(cfActions, dispatch);
-    const plotWidth  = 500;
-    const plotHeight = 100;
-
-    // const containerWidth = React.findDOMNode(this.refs.plot).offsetWidth;
+  renderDashboard({ appData, dispatch }) {
+    const actions = bindActionCreators(cfActions, dispatch);
     return (
       <div>
-        <Dashboard actions={actions} data={appData} />
+        <Dashboard actions={actions} data={appData}/>
       </div>
     );
   }
