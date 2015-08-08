@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import HistogramPlot from '../plotting/histogramPlot';
-import OrdinalQuantityPlot from '../plotting/ordinalQuantity';
+import NumericDistribution from '../plotting/numericDistribution';
+import OrdinalDistribution from '../plotting/ordinalDistribution';
 
 class AttributeExplorer extends Component {
   constructor() {
@@ -13,8 +13,6 @@ class AttributeExplorer extends Component {
   }
 
   render() {
-    const {name, type} = this.props;
-
     return (
       <div ref="content" style={{width: '100%'}}>
         {this.renderVisualization()}
@@ -23,33 +21,75 @@ class AttributeExplorer extends Component {
   }
 
   renderVisualization() {
-    const {type, name, dimension, group, actions} = this.props;
+    const {type, group} = this.props;
     const {width} = this.state;
 
     if (width === null) {
-      return (<p>Loading.</p>)
+      return null;
     }
 
+
+    let configuration = {};
     switch (type) {
       case 'linear':
+        configuration = {
+          margin: {top: 5, right: 5, bottom: 25, left: 50},
+          axes  : {
+            x: {
+              show: true,
+              min : 0,
+              max : d3.max(this.props.group.all().map(d => d.key))
+            },
+            y: {
+              show: true,
+              min : 0,
+              max : this.props.group.top(1)[0].value
+            }
+          },
+          series: {
+            data     : group.all(),
+            xAccessor: d => d.key,
+            yAccessor: d => d.value
+          }
+        };
+
         return (
-          <HistogramPlot
+          <NumericDistribution
             {...this.props}
             onBrush={this.handleFilter.bind(this)}
             width={width}
-            height={100}
-            margin={{top: 5, right: 1, bottom: 25, left: 1}}/>
+            config={configuration}/>
         );
 
       case 'ordinal':
+        configuration = {
+          margin: {top: 20, right: 5, bottom: 5, left: 50},
+          axes  : {
+            x: {
+              show: true,
+              min : 0,
+              max : this.props.group.top(1)[0].value
+            },
+            y: {
+              show  : true,
+              domain: this.props.group.all().map(d => d.key)
+            }
+          },
+          series: {
+            data     : group.all(),
+            xAccessor: d => d.value,
+            yAccessor: d => d.key
+          }
+        };
+
         return (
-          <OrdinalQuantityPlot
+          <OrdinalDistribution
             {...this.props}
             onClick={this.handleFilter.bind(this)}
             currentFilter={this.state.filter}
             width={width}
             height={group.size()*50}
-            margin={{top: 20, right: 1, bottom: 25, left: 50}}/>
+            config={configuration}/>
         );
     }
   }

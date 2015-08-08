@@ -3981,7 +3981,7 @@ const data = [
     "row.names": 307,
     "pclass"   : "1st",
     "survived" : "0",
-    "name"     : "Harrison, Mr William \tHenry",
+    "name"     : "Harrison, Mr William Henry",
     "age"      : "40.0000",
     "embarked" : "Southampton",
     "home.dest": "",
@@ -17074,7 +17074,7 @@ const titanic = data.map(record => {
   return {
     ...record,
     age : (record.age === 'NA' ? null : +record.age),
-    boat: (record.boat === '' ? null : +record.boat),
+    boat: (record.boat === '' ? null : record.boat)
   };
 });
 

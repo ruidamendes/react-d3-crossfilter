@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
-import Radium from 'radium';
-
+import React, { PropTypes, Component } from 'react';
 import d3 from 'd3';
 
-@Radium class ResponsiveD3 extends Component {
+class OrdinalDistribution extends Component {
   constructor() {
     super();
     this.state = {}
+  }
+
+  render() {
+    return (
+      <div ref="plot" style={{height: '100%'}}>
+      </div>
+    );
   }
 
   componentDidUpdate() {
@@ -21,9 +26,9 @@ import d3 from 'd3';
     const width   = React.findDOMNode(this.refs.plot).offsetWidth - margin.left - margin.right;
     const height  = React.findDOMNode(this.refs.plot).offsetHeight - margin.top - margin.bottom;
     const x       = d3.scale.linear().range([0, width]);
-    const y       = d3.scale.linear().range([height, 0]);
-    const xAxis   = d3.svg.axis().scale(x).orient("bottom");
-    const yAxis   = d3.svg.axis().scale(y).orient("left");
+    const y       = d3.scale.ordinal().rangeRoundBands([0, height], 0.1);
+    const xAxis   = d3.svg.axis().scale(x).orient("top").tickSize(5);
+    const yAxis   = d3.svg.axis().scale(y).orient("left").tickSize(5);
     const svg     = d3.select(React.findDOMNode(this.refs.plot)).append("svg");
     const plot    = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     const xAxisEl = plot.append("g").attr("class", "x axis");
@@ -43,24 +48,6 @@ import d3 from 'd3';
     })
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize.bind(this));
-  }
-
-  handleResize = this._debounce(() => {
-    const {margin} = this.props.config;
-    const width  = React.findDOMNode(this.refs.plot).offsetWidth - margin.left - margin.right;
-    const height = React.findDOMNode(this.refs.plot).offsetHeight - margin.top - margin.bottom;
-    this.refreshPlot(width, height);
-  }, 150);
-
-
-  render() {
-    return (
-      <div style={{height: '100%'}} ref="plot"/>
-    )
-  }
-
   refreshPlot(width, height) {
     const {margin, axes} = this.props.config;
     const {svg, plot, xAxisEl, yAxisEl, xAxis, yAxis, x, y} = this.state;
@@ -72,39 +59,73 @@ import d3 from 'd3';
       .attr("height", height);
 
     x.range([0, width]);
-    y.range([height, 0]);
+    y.range([height, 0]).rangeRoundBands([0, height], 0.1);
 
     x.domain([axes.x.min, axes.x.max]);
-    y.domain([axes.y.min, axes.y.max]);
+    y.domain(axes.y.domain);
 
-    axes.x.show && xAxisEl.attr("transform", "translate(0," + height + ")").call(xAxis);
+    axes.x.show && xAxisEl.call(xAxis);
     axes.y.show && yAxisEl.call(yAxis);
-
-    this.renderSeries();
+    this.renderSeries(width, height);
   }
 
-  renderSeries() {
-    const {series} = this.props.config;
+  renderSeries(width, height) {
     const {plot, x, y} = this.state;
+    const {currentFilter} = this.props;
+    const {series} = this.props.config;
 
-    const points = plot.selectAll(".dot").data(series[0].data);
+    const bars = plot.selectAll(".bar").data(series.data);
 
-    points.enter().append("circle").attr("class", "dot");
-
-    points
-      .attr("r", 3.5)
-      .attr("cx", function (d) {
-        return x(series[0].xAccessor(d));
+    bars.enter()
+      .append("g")
+      .attr("class", "bar")
+      .attr("transform", function (d) {
+        return "translate(0," + y(d.key) + ")";
       })
-      .attr("cy", function (d) {
-        return y(series[0].yAccessor(d));
-      })
-      .style("fill", function (d) {
-        return "rgba(0,0,0,0.5)"
-      });
+      .append("rect");
 
-    points.exit().transition().duration(500).style("opacity", 0).remove();
+    bars.selectAll("rect")
+      .attr("width", function (d) {
+        return x(series.xAccessor(d));
+      })
+      .attr("height", y.rangeBand())
+      .style("fill", d => {
+        const isFilter = currentFilter.indexOf(d.key) >= 0;
+        return isFilter ? "orange" : "steelblue"
+        return 'steelblue';
+      })
+      .on("click", this.handleClick.bind(this));
+
+
+    bars.exit()
+      .remove();
   }
+
+  handleClick(d) {
+    const {dimension, onClick, currentFilter} = this.props;
+
+    let values = currentFilter;
+
+    const isFilter = currentFilter.indexOf(d.key) >= 0;
+    if (isFilter) {
+      values.splice(currentFilter.indexOf(d.key), 1)
+    } else {
+      values = [...currentFilter, d.key]
+    }
+
+    onClick({
+      dimension: dimension,
+      values   : values,
+      ordinal  : true
+    });
+  }
+
+  handleResize = this._debounce(() => {
+    const {margin} = this.props.config;
+    const width  = React.findDOMNode(this.refs.plot).offsetWidth - margin.left - margin.right;
+    const height = React.findDOMNode(this.refs.plot).offsetHeight - margin.top - margin.bottom;
+    this.refreshPlot(width, height);
+  }, 150);
 
   _debounce(func, wait, immediate) {
     var timeout;
@@ -122,4 +143,4 @@ import d3 from 'd3';
   }
 }
 
-export default ResponsiveD3;
+export default OrdinalDistribution
