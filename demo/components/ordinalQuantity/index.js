@@ -109,7 +109,6 @@ class OrdinalQuantityPlot extends Component {
 
   handleClick(data) {
     const {dimension, onClick} = this.props;
-    console.log(dimension,data.key)
     onClick({
       dimension: dimension,
       values: data.key

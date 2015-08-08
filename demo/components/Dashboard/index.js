@@ -4,6 +4,7 @@ import {style} from './style.js'
 
 import HistogramPlot from '../histogramPlot';
 import OrdinalQuantityPlot from '../ordinalQuantity';
+import AttributeExplorer from '../attributeExplorer';
 import titanic from '../../data/titanic';
 
 @Radium class Dashboard extends Component {
@@ -17,9 +18,11 @@ import titanic from '../../data/titanic';
         {type: 'linear', name: 'Boat', function: (row) => +row.boat},
         {type: 'ordinal', name: 'Class', function: (row) => row.pclass},
         {type: 'ordinal', name: 'Gender', function: (row) => row.sex},
-        {type: 'ordinal', name: 'Survived?', function: (row) => {
+        {
+          type: 'ordinal', name: 'Survived?', function: (row) => {
           return (row.survived == '0') ? 'No' : 'Yes';
-        }},
+        }
+        },
       ],
       groups    : [
         {name: 'Age', function: (data) => data},
@@ -49,35 +52,13 @@ import titanic from '../../data/titanic';
 
   renderDimension(dimension) {
     const {actions, data} = this.props;
-
-    let plot;
-    if (data.dimensionTypes[dimension] === 'linear') {
-      plot = (
-        <HistogramPlot
-          dimension={data.dimensions[dimension]}
-          group={data.grps[dimension]}
-          onBrush={actions.filteredDimension}
-          width={500}
-          height={100}
-          margin={{top: 5, right: 1, bottom: 25, left: 1}}/>
-      )
-    } else {
-      plot = (
-        <OrdinalQuantityPlot
-          dimension={data.dimensions[dimension]}
-          group={data.grps[dimension]}
-          onClick={actions.filteredDimension}
-          width={500}
-          height={data.grps[dimension].size()*50}
-          margin={{top: 20, right: 1, bottom: 25, left: 50}}/>
-      )
-    }
-
     return (
-      <div key={dimension}>
-        <h1>Dimension: {dimension}</h1>
-        {plot}
-      </div>
+      <AttributeExplorer key={dimension}
+                         name={dimension}
+                         type={data.dimensionTypes[dimension]}
+                         dimension={data.dimensions[dimension]}
+                         group={data.grps[dimension]}
+                         actions={actions}/>
     )
   }
 }
