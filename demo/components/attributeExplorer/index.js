@@ -51,7 +51,7 @@ class AttributeExplorer extends Component {
 
   handleFilter(data) {
     const {actions, type} = this.props;
-     actions.filteredDimension(data);
+    actions.filteredDimension(data);
 
     switch (type) {
       case 'ordinal':
