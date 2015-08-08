@@ -23,11 +23,11 @@ class AttributeExplorer extends Component {
   }
 
   renderVisualization() {
-    const {type, name, dimension, group, actions} = this.props;
+    const {type, group} = this.props;
     const {width} = this.state;
 
     if (width === null) {
-      return (<p>Loading.</p>)
+      return null;
     }
 
     switch (type) {

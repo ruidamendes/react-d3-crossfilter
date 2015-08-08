@@ -23,7 +23,10 @@ class OrdinalQuantityPlot extends Component {
   }
 
   componentDidUpdate() {
-    this.renderPlot();
+    if (this.state.width !== this.props.width) {
+      this.setState({width: this.props.width});
+      this.renderPlot();
+    }
   }
 
   componentDidMount() {
@@ -65,6 +68,7 @@ class OrdinalQuantityPlot extends Component {
 
 
     this.setState({
+      canvas  : canvas,
       svg   : svg,
       height: height,
       width : width,
@@ -76,15 +80,17 @@ class OrdinalQuantityPlot extends Component {
   }
 
   renderPlot() {
-    const {svg, xScale, yScale, height, width, xAxis, yAxis} = this.state;
+    const {canvas, svg, xScale, yScale, height, width, xAxis, yAxis} = this.state;
     const {group, currentFilter} = this.props;
 
     const data = group.all();
-    xScale.domain([0, group.top(1)[0].value]);
+    xScale.range([0, width]).domain([0, group.top(1)[0].value]);
     yScale.domain(data.map(d => d.key));
 
     svg.select('.x.axis').call(xAxis);
     svg.select('.y.axis').call(yAxis);
+
+    canvas.attr("width", width + this.props.margin.left + this.props.margin.right);
 
     const bars = svg.selectAll(".bar").data(data);
 

@@ -29,7 +29,10 @@ class HistogramPlot extends Component {
   }
 
   componentDidUpdate() {
-    this.renderPlot();
+    if (this.state.width !== this.props.width) {
+      this.setState({width: this.props.width});
+      this.renderPlot();
+    }
   }
 
   componentDidMount() {
@@ -75,6 +78,7 @@ class HistogramPlot extends Component {
       .attr("height", height);
 
     this.setState({
+      canvas  : canvas,
       svg     : svg,
       brushSvg: brushSvg,
       height  : height,
@@ -88,14 +92,15 @@ class HistogramPlot extends Component {
   }
 
   renderPlot() {
-    const {svg, xScale, yScale, height, width, xAxis} = this.state;
+    const {canvas, svg, xScale, yScale, height, width, xAxis} = this.state;
     const {group} = this.props;
 
     const data = group.all();
-    xScale.domain([0, d3.max(data.map(d => d.key))]).nice();
+    xScale.range([0, width]).domain([0, d3.max(data.map(d => d.key))]).nice();
     yScale.domain([0, group.top(1)[0].value]);
 
-    //svg.select('.y.axis').call(yAxis);
+    canvas.attr("width", width + this.props.margin.left + this.props.margin.right);
+
     svg.select('.x.axis').call(xAxis).selectAll("text")
       .attr("class", "label")
       .attr("x", 0)

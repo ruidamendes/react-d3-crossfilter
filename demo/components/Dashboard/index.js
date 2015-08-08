@@ -18,14 +18,18 @@ import titanic from '../../data/titanic';
         {type: 'linear', name: 'Boat', function: (row) => +row.boat},
         {type: 'ordinal', name: 'Class', function: (row) => row.pclass},
         {type: 'ordinal', name: 'Gender', function: (row) => row.sex},
-        {type: 'ordinal', name: 'Survived?', function: (row) => row.survived}
+        {type: 'ordinal', name: 'Survived?', function: (row) => row.survived},
+        {type: 'ordinal', name: 'Age Recorded?', function: (row) => row.age !== null},
+        {type: 'ordinal', name: 'Got on a boat?', function: (row) => row.boat!== null}
       ],
       groups    : [
         {name: 'Age', function: (data) => data},
         {name: 'Boat', function: (data) => data},
         {name: 'Class', function: (data) => data},
         {name: 'Survived?', function: (data) => data},
-        {name: 'Gender', function: (data) => data}
+        {name: 'Gender', function: (data) => data},
+        {name: 'Age Recorded?', function: (data) => data},
+        {name: 'Got on a boat?', function: (data) => data},
       ]
     });
   }
