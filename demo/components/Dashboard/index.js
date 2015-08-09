@@ -16,38 +16,32 @@ import titanic from '../../data/titanic';
         {
           type     : 'linear',
           name     : 'Age',
-          dimension: row => +row.age,
-          grouper  : data => data
+          dimension: row => +row.age
         },
         {
           type     : 'ordinal',
           name     : 'Boat',
-          dimension: row => +row.boat, // heh
-          grouper  : data => data
+          dimension: row => +row.boat // heh
         },
         {
           type     : 'ordinal',
           name     : 'Class',
-          dimension: row => row.pclass,
-          grouper  : data => data
+          dimension: row => row.pclass
         },
         {
           type     : 'ordinal',
           name     : 'Gender',
-          dimension: row => row.sex,
-          grouper  : data => data
+          dimension: row => row.sex
         },
         {
           type     : 'ordinal',
           name     : 'Survived?',
-          dimension: row => row.survived,
-          grouper  : data => data
+          dimension: row => row.survived
         },
         {
           type     : 'ordinal',
           name     : 'Age available in data?',
-          dimension: row => row.age !== null,
-          grouper  : data => data
+          dimension: row => row.age !== null
         },
       ]
     });
