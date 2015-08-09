@@ -90,9 +90,21 @@ class OrdinalDistribution extends Component {
       })
       .attr("height", y.rangeBand())
       .style("fill", d => {
-        const isFilter = currentFilter.indexOf(d.key) >= 0;
-        return isFilter ? "orange" : "steelblue"
-        return 'steelblue';
+        const isFilter    = currentFilter.indexOf(d.key) >= 0;
+        const allFiltered = currentFilter.length === series.data.length;
+        const noFilters   = currentFilter.length === 0;
+
+        const color = () => {
+          if (isFilter || allFiltered) {
+            return 'orange';
+          } else if (noFilters) {
+            return 'steelblue';
+          } else if (!isFilter && !allFiltered) {
+            return '#ddd';
+          }
+        };
+
+        return color();
       })
       .on("click", this.handleClick.bind(this));
 
