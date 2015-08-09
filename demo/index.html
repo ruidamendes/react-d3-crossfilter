@@ -1,61 +1,64 @@
 <html>
-  <head>
+<head>
     <title>react-d3-crossfilter</title>
     <style>
 
-      .brush .extent {
-        stroke: black;
-        fill: #eee;
-        fill-opacity: 0.6;
-        shape-rendering: crispEdges;
-      }
+        .brush .extent {
+            stroke: black;
+            fill: #eee;
+            fill-opacity: 0.6;
+            shape-rendering: crispEdges;
+        }
 
-      * {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-      }
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
 
-      body {
-        font: 10px sans-serif;
-      }
+        body, .app {
+            margin: 0;
+            padding: 0;
+            font: 10px sans-serif;
+        }
 
-      .axis path,
-      .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-      }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
 
-      .dot {
-        fill: rgba(0,0,0,0.5);
-      }
+        .dot {
+            fill: rgba(0, 0, 0, 0.5);
+        }
 
-      .line {
-        stroke: rgba(0,0,0,0.5);
-      }
+        .line {
+            stroke: rgba(0, 0, 0, 0.5);
+        }
 
-      .bar rect {
-        fill: steelblue;
-        shape-rendering: crispEdges;
-      }
+        .bar rect {
+            fill: steelblue;
+            shape-rendering: crispEdges;
+        }
 
-      .bar text {
-        fill: #fff;
-      }
+        .bar text {
+            fill: #fff;
+        }
 
-      .plot {
-        display: block;
-      }
-      .brush-x {
-        display: block;
-      }
+        .plot {
+            display: block;
+        }
+
+        .brush-x {
+            display: block;
+        }
 
     </style>
-  </head>
-  <body>
-    <div class="app" id="root">
-    </div>
-  </body>
-  <script src="/static/bundle.js"></script>
+</head>
+<body>
+<div class="app" id="root">
+</div>
+</body>
+<script src="/static/bundle.js"></script>
 </html>

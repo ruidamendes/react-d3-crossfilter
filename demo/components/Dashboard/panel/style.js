@@ -1,9 +1,12 @@
 export const style = {
   base: {
     border       : '1px solid #ddd',
-    width        : '50%',
+    width        : '100%',
     display      : 'inline-block',
-    verticalAlign: 'top'
+    verticalAlign: 'top',
+
+    '@media (min-width: 720px)' : {width: '50%'},
+    '@media (min-width: 1024px)' : {width: '33.33%'},
   },
 
   header: {

@@ -57,7 +57,6 @@ import titanic from '../../data/titanic';
 
     return (
       <div style={style.base}>
-        <pre><h1 style={style.header}>Dashboard</h1></pre>
         {dimensionBlock}
       </div>
     );
