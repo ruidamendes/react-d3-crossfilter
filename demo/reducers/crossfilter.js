@@ -7,24 +7,24 @@ export default function crossfilterdata(state = initialState, action) {
   switch (action.type) {
 
     case 'CREATED_CROSSFILTER':
-      const dataset  = crossfilter(action.data.dataset);
-      const dims     = {};
-      const dimTypes = {};
-      action.data.dimensions.map(dimension => {
-        dims[dimension.name]     = dataset.dimension(dimension.function);
-        dimTypes[dimension.name] = dimension.type;
+      const dataset        = crossfilter(action.data.dataset);
+      const dimensions     = {};
+      const groups         = {};
+      const dimensionTypes = {};
+
+      action.data.attributes.map(attribute => {
+        dimensions[attribute.name]     = dataset.dimension(attribute.dimension);
+        groups[attribute.name]         = dimensions[attribute.name].group(attribute.grouper);
+        dimensionTypes[attribute.name] = attribute.type;
       });
-      const grps     = {};
-      action.data.groups.map(group => {
-        grps[group.name] = dims[group.name].group(group.function)
-      });
+
       return {
         ...state,
         all           : dataset.groupAll(),
         dataset       : dataset,
-        dimensions    : dims,
-        dimensionTypes: dimTypes,
-        grps          : grps
+        dimensions    : dimensions,
+        dimensionTypes: dimensionTypes,
+        groups        : groups
       };
 
     case 'FILTERED_DIMENSION':
