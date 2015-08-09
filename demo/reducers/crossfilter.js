@@ -14,7 +14,7 @@ export default function crossfilterdata(state = initialState, action) {
 
       action.data.attributes.map(attribute => {
         dimensions[attribute.name]     = dataset.dimension(attribute.dimension);
-        groups[attribute.name]         = dimensions[attribute.name].group(attribute.grouper);
+        groups[attribute.name]         = dimensions[attribute.name].group(attribute.group || ((data) => data));
         dimensionTypes[attribute.name] = attribute.type;
       });
 
