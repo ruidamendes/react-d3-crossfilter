@@ -5,6 +5,7 @@ class NumericDistribution extends Component {
   constructor() {
     super();
     this.state = {}
+    this._handleResize = this.handleResize.bind(this);
   }
 
   render() {
@@ -19,6 +20,10 @@ class NumericDistribution extends Component {
     const width  = React.findDOMNode(this.refs.plot).offsetWidth - margin.left - margin.right;
     const height = React.findDOMNode(this.refs.plot).offsetHeight - margin.top - margin.bottom;
     this.refreshPlot(width, height);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._handleResize);
   }
 
   componentDidMount() {
@@ -40,7 +45,7 @@ class NumericDistribution extends Component {
       .append("g").attr("class", "x brush");
 
 
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this._handleResize);
 
     this.setState({
       svg     : svg,

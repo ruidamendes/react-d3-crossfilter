@@ -5,6 +5,7 @@ class OrdinalDistribution extends Component {
   constructor() {
     super();
     this.state = {}
+    this._handleResize = this.handleResize.bind(this);
   }
 
   render() {
@@ -21,6 +22,10 @@ class OrdinalDistribution extends Component {
     this.refreshPlot(width, height);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._handleResize);
+  }
+
   componentDidMount() {
     const {margin} = this.props.config;
     const width   = React.findDOMNode(this.refs.plot).offsetWidth - margin.left - margin.right;
@@ -34,7 +39,7 @@ class OrdinalDistribution extends Component {
     const xAxisEl = plot.append("g").attr("class", "x axis");
     const yAxisEl = plot.append("g").attr("class", "y axis");
 
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', this._handleResize);
 
     this.setState({
       svg    : svg,
