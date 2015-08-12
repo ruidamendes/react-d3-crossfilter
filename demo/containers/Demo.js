@@ -1,31 +1,49 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { Connector } from 'react-redux';
 
-import * as cfActions from '../actions/CrossfilterActions.js';
-
-import crossfilter from 'crossfilter';
 import Dashboard from '../components/dashboard';
+import Crossfilter from '../components/crossfilter';
+import titanic from '../data/titanic';
 
 export default class Demo extends Component {
-  constructor() {
-    super();
-    this.state = {seed: 0}
-  }
-
   render() {
-    return (
-      <Connector select={state => ({ appData: state.crossfilterdata })}>
-        {this.renderDashboard.bind(this)}
-      </Connector>
-    );
-  }
+    const attributes = [
+      {
+        type     : 'linear',
+        name     : 'Age',
+        dimension: row => +row.age
+      },
+      {
+        type     : 'ordinal',
+        name     : 'Boat',
+        dimension: row => +row.boat // heh
+      },
+      {
+        type     : 'ordinal',
+        name     : 'Class',
+        dimension: row => row.pclass
+      },
+      {
+        type     : 'ordinal',
+        name     : 'Gender',
+        dimension: row => row.sex
+      },
+      {
+        type     : 'ordinal',
+        name     : 'Survived?',
+        dimension: row => row.survived
+      },
+      {
+        type     : 'ordinal',
+        name     : 'Age available in data?',
+        dimension: row => row.age !== null
+      }
+    ];
 
-  renderDashboard({ appData, dispatch }) {
-    const actions = bindActionCreators(cfActions, dispatch);
     return (
       <div>
-        <Dashboard actions={actions} data={appData}/>
+        <Crossfilter data={titanic} attributes={attributes}>
+          <Dashboard />
+        </Crossfilter>
       </div>
     );
   }
