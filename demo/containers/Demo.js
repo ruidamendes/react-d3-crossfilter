@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Dashboard from '../components/dashboard';
+import Dashboard from '../components/Dashboard';
 import Crossfilter from '../components/crossfilter';
 import titanic from '../data/titanic';
 
